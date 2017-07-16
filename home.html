@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br" ng-app='App'>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="app/app.js"></script>
+    <script type="text/javascript" src="app/conroller/cartController.js"></script>
+</head>
+
+<body ng-controller="cartController">
+    <nav class="categ categ-esporte">
+        <h3 class="text-center">Carrinho de Compras</h3>
+    </nav>
+    <br></br>
+    <div class="col-md-1"></div>
+    <div class="col-md-2">
+        <button class="btn btn-danger" ng-click="mostraItens()"><span class="glyphicon glyphicon-shopping-cart"></span>Carrinho de Compras ({{qtd}})</button>
+        <br><br/>
+    </div>
+
+    <div class="col-md-9">
+        <div class="col-md-12" ng-if="aparece">
+            <div class="col-md-4" ng-repeat="choosed in chooseds track by $index">
+                <p> <img style="width:50px;height:50px;" src="{{choosed.img}}"></img>
+                    - {{choosed.name}} - {{choosed.price | currency}} - <span ng-click="remove($index,choosed)" class="glyphicon glyphicon-remove"></span>                    </p>
+            </div><br></br>
+            <form method="post" target="pagseguro" action="https://pagseguro.uol.com.br/v2/checkout/payment.html">
+                <!-- Campos obrigatórios -->
+                <input name="receiverEmail" type="hidden" value="suporte@lojamodelo.com.br">
+                <input name="currency" type="hidden" value="BRL">
+                <!-- Itens do pagamento (ao menos um item é obrigatório) -->
+                <input name="itemId1" type="hidden" value="0001">
+                <input name="itemDescription1" type="hidden" value="Produtos Teste">
+                <input name="itemAmount1" type="hidden" value="{{precototal}}.00">
+                <input name="itemQuantity1" type="hidden" value="1">
+                <input name="itemWeight1" type="hidden" value="1000">
+                <!-- submit do form (obrigatório) -->
+                <input alt="Pague com PagSeguro" name="submit" type="image" src="https://p.simg.uol.com.br/out/pagseguro/i/botoes/pagamentos/120x53-pagar.gif"
+                />
+            </form>
+        </div>
+
+        <div class="col-md-1"></div>
+        <div class="col-md-2 text-center" ng-if="apareceProds" ng-repeat="product in products">
+            <p><img style="width:120px;height:120px;" src="{{product.img}}"></img>
+            </p>
+            <div class="jumbotron">
+                <p>{{product.name}}</p>
+                <p>{{product.price | currency}}</p>
+                <button class="btn btn-success" ng-click="add(product)">Comprar</button>
+            </div>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+
+</body>
+
+</html>
